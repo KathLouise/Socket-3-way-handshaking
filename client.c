@@ -114,7 +114,7 @@ int connect_server(int port_number){
 
     //Conectando ao server
     int i = 0;
-    while (i < 256){
+//    while (i < 256){
         try_connect = connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr));
 
         if(try_connect < 0){
@@ -122,8 +122,8 @@ int connect_server(int port_number){
             perror("");
            // exit(1);
         }
-        i = i+1;
-    }
+    //    i = i+1;
+  //  }
     
     return sock;
 }
