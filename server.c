@@ -301,7 +301,7 @@ int main (int argc, char **argv){
     socket_server = socket(AF_INET , SOCK_STREAM , 0);
     if (socket_server == -1)
     {
-        printf("Não foi possivel criar o sockt.\n");
+        printf("Não foi possivel criar o socket.\n");
     }
     puts("Socket criado.");
      
@@ -313,7 +313,7 @@ int main (int argc, char **argv){
     //Preparando o Bind
     if(bind(socket_server, (struct sockaddr *)&server, sizeof(server)) < 0)
     {
-        perror("bind failed. Error");
+        printf("Erro ao tentar dar binding.\n");
         return 1;
     }
     puts("Bind feito com sucesso.\n");
