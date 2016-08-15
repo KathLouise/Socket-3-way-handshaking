@@ -108,15 +108,14 @@ int connect_server(int port_number){
         exit(1);    
     }
     printf("1\n");
+    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1"); //IP do server, neste caso localhost
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_LOOPBACK; //IP do server, neste caso localhost
-    printf("%d",htonl(INADDR_LOOPBACK));
-    server_addr.sin_port = (port_number);
+    server_addr.sin_port = htons(port_number);
 
     //Conectando ao server
     int i = 0;
     while (i < 256){
-        try_connect = connect(sock, (struct sockaddr*) &server_addr, sizeof(server_addr));
+        try_connect = connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr));
 
         if(try_connect < 0){
             printf("Erro ao tentar conectar. \n");
@@ -365,7 +364,7 @@ int main(int argc, char **argv){
         exit(0);
     }
 
-    port_number = htons(atoi(argv[1])); //coloca o numero da porta
+    port_number = atoi(argv[1]); //coloca o numero da porta
     sock = connect_server(port_number); //conecta no server
 
     //obtem a porta de origem

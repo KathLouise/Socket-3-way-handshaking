@@ -1,0 +1,85 @@
+Source Port:36728
+Destination Port: 8888
+Sequence Number: 100
+Acknowledgment Number: 0
+Header Flags: SYN = 1
+Header Flags:1
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:8888
+Destination Port: 36728
+Sequence Number: 200
+Acknowledgment Number: 101
+Header Flags: SYN = 1
+Header Flags: ACK = 1
+Header Flags:3
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:36728
+Destination Port: 8888
+Sequence Number: 200
+Acknowledgment Number: 201
+Header Flags: ACK = 1
+Header Flags:2
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:36728
+Destination Port: 8888
+Sequence Number: 100
+Acknowledgment Number: 0
+Header Flags: FIN = 1
+Header Flags:4
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:8888
+Destination Port: 36728
+Sequence Number: 100
+Acknowledgment Number: 101
+Header Flags: ACK = 1
+Header Flags:2
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:8888
+Destination Port: 36728
+Sequence Number: 200
+Acknowledgment Number: 101
+Header Flags: FIN = 1
+Header Flags:4
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+
+Source Port:30863
+Destination Port: 8888
+Sequence Number: 100
+Acknowledgment Number: 0
+Header Flags: FIN = 1
+Header Flags:4
+Window: 0
+Checksum: 0x0
+Urgent Pointer: 0
+Options: 0
+-----------
+

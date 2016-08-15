@@ -100,7 +100,7 @@ void print_tcp_seg(struct tcp_header *tcp_seg){
 
 int create_server_socket(int port_number){
     int server_socket;
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server;
     
     //Cria o socket
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -109,19 +109,19 @@ int create_server_socket(int port_number){
         printf("Socket não pode ser aberto. \n");
         exit(1);
     }   
+    printf("Socket criado.\n");
     
     //inicializando a estrutra do socket
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port_number);
-
-    printf("%d\n",htonl(INADDR_ANY));
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons(port_number);
 
     //dando bind
-    if(bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0){
+    if(bind(server_socket, (struct sockaddr *)&server, sizeof(server)) < 0){
         printf("Ocorreu um erro ao dar binding.\n");
         exit(1);
     }
+    printf("Bind...\n");
 
     return(server_socket);
 }
@@ -133,17 +133,17 @@ int create_server_socket(int port_number){
 
 int connect_client(int server_socket, int  port_number){
     struct sockaddr_in client_addr;
-    socklen_t addr_size;
+    int size;
     int accept_socket, num_data_recv;
     char buffer[256];
     
-    listen(server_socket, 5);
+    listen(server_socket, 3);
     printf("Escutando na porta %d\n", port_number);
 
-    addr_size = sizeof(client_addr);
+    size = sizeof(struct sockaddr_in);
     int i =0;
     while(i < 256){
-        accept_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_size);
+        accept_socket = accept(server_socket, (struct sockaddr *)&client_addr, (socklen_t*)&size);
 
         if(accept_socket < 0){
             printf("Erro ao aceitar a conexao tentandando denovo.\n");
@@ -152,7 +152,8 @@ int connect_client(int server_socket, int  port_number){
         }    
         i = i+1;
     }
-    
+    printf("Conexao aceita.\n");    
+
     return accept_socket;
 }
 
@@ -344,17 +345,16 @@ int receive_close_ack(int accept_socket){
 
 //-------------------------------------------------------------------//
 int main (int argc, char **argv){
-    char buffer[255];
-    int numDataRecv, numSent, port_number;
-    int server_socket;
-    int accept_socket;
-    struct tcp_header tcpSeg;
-    struct tcp_header tcpAckSeq;
-
-
     //limpando arquivo de saida
     FILE *file;
 
+    
+   // server_socket = create_server_socket(port_number);
+   // accept_socket = connect_client(server_socket, port_number);
+
+    int socket_desc , accept_socket, c , read_size, port_number;
+    struct sockaddr_in server , client;
+     
     file = fopen("server_output.txt", "w");
     fclose(file);
 
@@ -363,10 +363,45 @@ int main (int argc, char **argv){
         exit(0);
     }
     
-    port_number = htons(atoi(argv[1])); //coloca o numero da porta
-    
-    server_socket = create_server_socket(port_number);
-    accept_socket = connect_client(server_socket, port_number);
+    port_number =atoi(argv[1]); //coloca o numero da porta
+
+    //Create socket
+    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+    if (socket_desc == -1)
+    {
+        printf("Could not create socket");
+    }
+    puts("Socket created");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons(port_number);
+     
+    //Bind
+    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+    {
+        //print the error message
+        perror("bind failed. Error");
+        return 1;
+    }
+    puts("bind done");
+     
+    //Listen
+    listen(socket_desc , 3);
+     
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+    c = sizeof(struct sockaddr_in);
+     
+    //accept connection from an incoming client
+    accept_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+    if (accept_socket < 0)
+    {
+        perror("accept failed");
+        return 1;
+    }
+    puts("Connection accepted");
 
     printf("Parte 1\n");
 
